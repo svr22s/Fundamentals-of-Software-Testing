@@ -1,0 +1,84 @@
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation    Testing project creation functionalities in GitLab.
+
+Pre Condition    Open Browser To GitLab Project Creation Page
+Post Condition   Close Browser
+Tags             Project_Creation, TS-3-Project-Creation
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+CreateProjectUrl = https://gitlab.com/projects/new
+
+Group_name = Groupname
+Project_name = Projectname
+Template_name = .NET Core
+
+ProjectUrl = https://gitlab.com/groupname5775945/Projectname
+
+Uptaded_project_name = Uptadedprojectname
+Delete_Confirmation = groupname5775945/Projectname
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Test examples are below write test process steps for each below test case
+
+Create Blank Project
+    Navigate To Create Project Page  CreateProjectUrl
+    Input Group_name  Groupname
+    Input Project_name  Projectname
+    Optionally Tick the  Getting Started README
+    Click Button  Create project
+    Verify that the project was successfully created
+
+
+Create template project 
+    Navigate To Create Project Page  CreateProjectUrl
+    Input Group_name  Groupname
+    Input Project_name  Projectname
+    Select Template  Template_Name
+    Click Button  Create project
+    Verify that the project was successfully created
+
+Update name of template project
+    Navigate To Project Page  ProjectUrl
+    Click on the three dots on the right side of the screen
+    Click on project settings
+    Input Project_name  Uptaded_project_name
+    Click Button  Save Changes
+    Verify that the project name was successfully updated with " Project 'Uptadedprojectname' was successfully updated." message.
+
+
+Delete template project
+    Navigate To Project Page  ProjectUrl
+    Click on the three dots on the right side of the screen
+    Click on project settings
+    Click Button  Advanced
+    Click Button  Delete project
+    Input Delete_Confirmation  groupname5775945/Projectname
+    Click Button  Yes, delete project
+    Verify that the project name was successfully deleted
+
+
+Valide that message is showing Project 'First project ' was successfully created.
+    Navigate To Create Project Page  CreateProjectUrl
+    Click Button Create blank report
+    Input Project_name  First project
+    Click Button  Create project
+    Validation that the message "Project 'First project ' was successfully created." is showing
+
+
+# Negative Test
+
+Create a blank project with the previous same name
+    Navigate To Create Project Page  CreateProjectUrl
+    Click Button Create blank report
+    Input Project_name  First project
+    Click Button  Create project
+    Error message appears "Project namespace name has already been taken; Name has already been taken; Path has already been taken"

@@ -1,0 +1,154 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation    Testing the complete user registration on GitLab, including standard and third-party registrations. Test cenário with valid and invalid inputs.
+
+Pre Condition	Open Browser To Registration Page
+Post Condition	Close All Browsers
+Tags	Registration, TS-2-Registration
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+SignUpUrl = https://gitlab.com/users/sign_up
+
+First_name = Name
+Last_name = Lastname
+
+Username = XYZ
+Email = mail@example.com
+Password = ***
+
+Invalid_Username = XYZZZ
+Invalid_Email = mail.com
+Empty = 
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Register User With Valid Credential
+    Navigate To Registration Page  SignUpUrl
+    Input First_name  Name
+    Input Last_name  Lastname
+    Input Username  Username
+    Input Email  Email
+    Input Password  Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Successful
+
+
+Sign Up With Google
+    Navigate To Registration Page  SignUpUrl
+    Click Google SignUp
+    Authenticate With Google
+    Verify Registration Successful
+
+
+Sign Up With GitHub
+    Navigate To Registration Page  SignUpUrl
+    Click GitHub SignUp
+    Authenticate With GitHub
+    Verify Registration Successful
+
+
+Sign Up With Bitbucket
+    Navigate To Registration Page  SignUpUrl
+    Click Bitbucket SignUp
+    Authenticate With Bitbucket
+    Verify Registration Successful
+
+
+Sign Up With Salesforce
+    Navigate To Registration Page  SignUpUrl
+    Click Salesforce SignUp
+    Authenticate With Salesforce 
+    Verify Registration Successful
+
+
+# Negative Tests
+
+Register User With Invalid Username
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  First_name
+    Input Last Name  Last_name
+    Input Username Invalid_Username
+    Input Email  Email
+    Input Password Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With the "Username is already taken." message.
+
+Register User With Invalid Email
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  First_name
+    Input Last Name Last_name
+    Input Username  Username
+    Input Email  Invalid_Email
+    Input Password Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With "Please provide a valid email address." message.
+
+Register User With Empty Password
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  First_name
+    Input Last Name  Last_name
+    Input Username  Username
+    Input Email  Email
+    Input Password  Empty
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With "Minimum length is 8 characters." message
+
+
+Register User With Previously Used Email
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  First_name
+    Input Last Name  Last_name
+    Input Username  Username
+    Input Email  Email
+    Input Password  Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With Email Already In Use Message
+
+
+Register User With All Fields Empty
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  Empty
+    Input Last Name  Empty
+    Input Username  Empty
+    Input Email  Empty 
+    Input Password  Empty
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With Fields Required
+
+
+Register User With Missing First Name and Last Name
+    Input First Name  Empty
+    Input Last Name  Empty
+    Input Username  Username
+    Input Email  Email 
+    Input Password  Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With "This field is required." message.
+
+Register User With Verification Challenge Error
+    Navigate To Registration Page  SignUpUrl
+    Input First Name  First_name
+    Input Last Name  Last_name
+    Input Username Username
+    Input Email  Email
+    Input Password Password
+    Optionally Accept Contact Terms
+    Submit Registration Form
+    Verify Registration Fails With the "There was a error loading the user verification challenge. Refresh to try again." message.

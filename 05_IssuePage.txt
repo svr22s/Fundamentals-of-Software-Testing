@@ -1,0 +1,69 @@
+#******************** Settings ************************
+
+*** Settings ***
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+Pre Condition	Open Browser To GitLab Issues Page and a Project must be created by the user before 
+Post Condition	Close All Browsers
+Tags Issues, TS-4-Issues
+
+#******************* Common Variables ********************
+
+
+*** Variables ***
+
+ProjectPageUrl = https://gitlab.com/svr22/first-project
+
+Issue_title = Firstissue
+
+IssuePageUrl = https://gitlab.com/svr22/first-project/-/issues
+
+Updated_issue_title = Firstissueupdated
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Test
+
+Create issue
+    Navigate To Project Page  ProjectPageUrl
+    Navigate to the the left sidebar
+    Click Button  Plan
+    Click Button  Issues
+    Click Button  New Issue
+    Input Title  Issue_title
+    Click Button  Create issue
+    Verify that the issue was successfully created
+    
+
+Update name of issue
+    Navigate To Issue Page  IssuePageUrl
+    Click Button  Firstissue
+    Click Button  Edit
+    Input Title  Updated_issue_title
+    Click Button  Save changes
+    Verify that the issue was successfully updated
+
+
+Create second issue with previous updated name
+    Navigate To Project Page  ProjectPageUrl
+    Navigate to the the left sidebar
+    Click Button  Plan
+    Click Button  Issues
+    Click Button  New Issue
+    Input Title  Issue_title
+    Click Button  Create issue
+    Verify that the second issue with the previous updated name was successfully created
+  
+
+Delete first issue
+    Navigate To Issue Page  IssuePageUrl
+    Click Button  Firstissueupdated
+    Click Button  Three dots on the right side of the screen
+    Click Button  Delete issue
+    Click Button  Delete issue
+    Click Button  Save changes
+    Validation that the issue was successfully deleted with "The issue was successfully deleted." message.
